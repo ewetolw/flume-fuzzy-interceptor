@@ -16,18 +16,69 @@ import java.util.Map;
 * */
 public class Runner {
     private static List<Event> list = new ArrayList();
+    private static String body1 =
+            "  {\n" +
+            "    \"id\": 131,\n" +
+            "    \"age\": 47,\n" +
+            "    \"gender\": \"female\",\n" +
+            "    \"temperature\": 35.2314\n" +
+            "  }";
+    private static String body2 =
+            "{\n" +
+            "    \"id\": 179,\n" +
+            "    \"age\": 21,\n" +
+            "    \"gender\": \"male\",\n" +
+            "    \"temperature\": 35.5879\n" +
+            "  }";
+
+    private static String arrayBody = "[\n" +
+            "  {\n" +
+            "    \"id\": 139,\n" +
+            "    \"age\": 17,\n" +
+            "    \"gender\": \"female\",\n" +
+            "    \"temperature\": 39.8152\n" +
+            "  },\n" +
+            "  {\n" +
+            "    \"id\": 102,\n" +
+            "    \"age\": 39,\n" +
+            "    \"gender\": \"female\",\n" +
+            "    \"temperature\": 37.6774\n" +
+            "  }]";
 
     public static void main(String[] args){
-        Event e = new JSONEvent();
+        Event e1 = new JSONEvent();
+        Event e2 = new JSONEvent();
         Map<String, String> m = new HashMap<String, String>();
-        e.setHeaders(m);
-        e.setBody("body".getBytes());
-        list.add(e);
+        e1.setHeaders(m);
+        e1.setBody(body1.getBytes());
+        list.add(e1);
+        e2.setHeaders(m);
+        e2.setBody(body2.getBytes());
+        list.add(e2);
 
-        Context context = new Context();
+        Map<String, String> settings = new HashMap<String, String>();
+        settings.put("streamClass", "pl.polsl.bdis.models.Patient");
+        settings.put("query", "select * from stream where gender = 'male'");
+        Context context = new Context(settings);
         FuzzySqlInterceptor.Builder builder = new FuzzySqlInterceptor.Builder();
         builder.configure(context);
         Interceptor interceptor = builder.build();
-        interceptor.intercept(list);
+        List<Event> l = interceptor.intercept(list);
+        for(Event e : l ) {
+            System.out.println(new String(e.getBody()));
+        }
     }
 }
+
+////// recommend for data generation!
+//https://www.json-generator.com/
+//
+//[
+//  '{{repeat(5, 7)}}',
+//  {
+//    id: '{{integer(100, 200)}}',
+//    age: '{{integer(16,50)}}',
+//    gender: '{{gender()}}',
+//    temperature: '{{floating(35, 40)}}'
+//  }
+//]
