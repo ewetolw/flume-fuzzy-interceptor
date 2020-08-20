@@ -58,7 +58,7 @@ public class Runner {
 
         Map<String, String> settings = new HashMap<String, String>();
         settings.put("streamClass", "pl.polsl.bdis.models.Patient");
-        settings.put("query", "select * from stream where gender = 'male'");
+        settings.put("query", "select * from stream where gender = 'female'");
         Context context = new Context(settings);
         FuzzySqlInterceptor.Builder builder = new FuzzySqlInterceptor.Builder();
         builder.configure(context);

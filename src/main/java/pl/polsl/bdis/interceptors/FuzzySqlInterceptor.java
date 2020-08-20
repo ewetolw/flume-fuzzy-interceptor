@@ -20,14 +20,14 @@ import java.util.List;
 public class FuzzySqlInterceptor implements Interceptor {
 
     //private static final Logger logger = LoggerFactory.getLogger(FuzzySqlInterceptor.class);
-    private final Class stream;
+    private final Class<Serializable> stream;
     private final String query;
 
-    private SQLParser parser;
-    private ObjectMapper mapper = new ObjectMapper();
+    private final SQLParser<Serializable> parser;
+    private final ObjectMapper mapper = new ObjectMapper();
 
-    public FuzzySqlInterceptor(Class streamClass, String query) {
-        this.stream = streamClass;
+    public FuzzySqlInterceptor(Class<Serializable> streamClass, String query) {
+        this.stream =  streamClass;
         //logger.info("Created stream: " + this.stream);
         System.out.println("Created stream for data structure: " + this.stream);
         this.query = query;
@@ -42,8 +42,8 @@ public class FuzzySqlInterceptor implements Interceptor {
 
     public Event intercept(Event event) {
         byte[] eventBody = event.getBody();
-        IndexedCollection ic = new ConcurrentIndexedCollection();
-        ResultSet results;
+        IndexedCollection<Serializable> ic = new ConcurrentIndexedCollection<Serializable>();
+        ResultSet<Serializable> results;
         String stringResult = null;
         try {
             ic.add(mapper.readValue(eventBody, stream));
@@ -94,9 +94,9 @@ public class FuzzySqlInterceptor implements Interceptor {
         private String query;
 
         public Interceptor build() {
-            Class<?> cls = null;
+            Class<Serializable> cls = null;
             try {
-                cls = Class.forName(this.stream);
+                cls = (Class<Serializable>) Class.forName(this.stream);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
