@@ -9,6 +9,7 @@ import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.interceptor.Interceptor;
 import org.codehaus.jackson.map.ObjectMapper;
+import pl.polsl.bdis.fuzzyQueries.QueryParser;
 
 
 import static com.googlecode.cqengine.codegen.AttributeBytecodeGenerator.createAttributes;
@@ -28,11 +29,12 @@ public class FuzzySqlInterceptor implements Interceptor {
 
     public FuzzySqlInterceptor(Class<Serializable> streamClass, String query) {
         this.stream =  streamClass;
-        //logger.info("Created stream: " + this.stream);
         System.out.println("Created stream for data structure: " + this.stream);
-        this.query = query;
-        //logger.info("Set query: " + this.query);
+
+        QueryParser preParser = new QueryParser();
+        this.query = preParser.parse(query);
         System.out.println("Set query: " + this.query);
+
         this.parser = SQLParser.forPojoWithAttributes(this.stream, createAttributes(this.stream));
     }
 

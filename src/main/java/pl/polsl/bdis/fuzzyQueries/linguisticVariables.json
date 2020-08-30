@@ -1,0 +1,20 @@
+[
+  {
+    "colName": "temperature",
+    "types": [
+      {
+        "name": "normal",
+        "type": "isoscelesTriangle",
+        "a": 36.6,
+        "b": 0.4
+      },
+      {
+        "name": "high",
+        "type": "triangle",
+        "a": 37.0,
+        "b": 38.0,
+        "c": 45.0
+      }
+    ]
+  }
+]
