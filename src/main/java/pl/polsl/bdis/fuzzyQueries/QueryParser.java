@@ -1,10 +1,6 @@
 package pl.polsl.bdis.fuzzyQueries;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Dictionary;
+
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,49 +9,35 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.mortbay.util.ajax.JSON;
 
 public class QueryParser {
     private String configFilePath="linguisticVariables.json";
     //just for now, should be read from json file
     private String lingVariables = "\"{\\\"colName\\\":\\\"temperature\\\",\\\"types\\\":[{\\\"name\\\":\\\"normal\\\",\\\"type\\\":\\\"isoscelesTriangle\\\",\\\"a\\\":36.6,\\\"b\\\":0.4},{\\\"name\\\":\\\"high\\\",\\\"type\\\":\\\"triangle\\\",\\\"a\\\":37,\\\"b\\\":38,\\\"c\\\":45}]}\"";
     private Map<Pattern, FuzzyFunctionStrategy> fuzzyFunctionByExpression = new HashMap<Pattern, FuzzyFunctionStrategy>();
-    private FuzzyFunctionStrategy strategy;
-    private String fuzzyExpression;
 
     public QueryParser () {
-        fuzzyFunctionByExpression.put(Pattern.compile("triangle\\(([^)]+)\\)"), new TriangleFuzzyFunctionStrategy());
+        fuzzyFunctionByExpression.put(Pattern.compile("triangle\\(([^)]+)\\)\\s*\\W*\\d.?\\d?"), new TriangleFuzzyFunctionStrategy());
+        fuzzyFunctionByExpression.put(Pattern.compile("trapeze\\(([^)]+)\\)"), new TrapezeFuzzyFunctionStrategy());
+        // initialize this map with all fuzzy expressions. Probably json file containing linguistic expressions should
+        // be read here as well and initialized
     }
 
 public String parse(String initQuery) {
     String query = initQuery;
-    // read JSON
-    // String json = readJson(lingVariables);
-    // check if query contains some linguistic expressions -> check in json
-    boolean containsLinguisticExpression = true; //TODO
+    for(Map.Entry<Pattern, FuzzyFunctionStrategy> entry : fuzzyFunctionByExpression.entrySet()) {
+        Matcher matcher = entry.getKey().matcher(initQuery);
 
-    // in case it does, translate it to fuzzy functions
-    if(containsLinguisticExpression) {
-        for(Map.Entry<Pattern, FuzzyFunctionStrategy> entry : fuzzyFunctionByExpression.entrySet()) {
-            Matcher matcher = entry.getKey().matcher(initQuery);
-
-            if(matcher.find()){
-                try {
-                fuzzyExpression = matcher.group(0);
-                strategy = entry.getValue();
-                }
-                catch(Exception ex){
-                    ex.printStackTrace();
-                }
-
-                break;
+        while (matcher.find()){
+            try {
+                String fuzzyExpression = matcher.group(0);
+                FuzzyFunctionStrategy strategy = entry.getValue();
+                query = query.replace(fuzzyExpression, strategy.convertFuzzyToSql(fuzzyExpression));
+            }
+            catch(Exception ex){
+                ex.printStackTrace();
             }
         }
-    }
-
-    // use fuzzy functions to translate query to pure SQL
-    if(strategy != null) {
-        query = initQuery.replace(fuzzyExpression, strategy.convertFuzzyToSql(fuzzyExpression));
     }
 
     return query;

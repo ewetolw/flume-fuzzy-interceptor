@@ -13,7 +13,9 @@
         "type": "triangle",
         "a": 37.0,
         "b": 38.0,
-        "c": 45.0
+        "c": 45.0,
+        "affiliationCoefficient": 0.6,
+        "equalitySign": ">"
       }
     ]
   }
