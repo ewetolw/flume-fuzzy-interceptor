@@ -1,0 +1,30 @@
+[
+  {
+    "key": "fever",
+    "variable": {
+      "type": "temperature",
+      "values": [
+        36.6,
+        37.5,
+        40.6
+      ],
+      "affiliationCoefficient": 0.5,
+      "comparationMark": ">",
+      "affiliationFunction": "triangle"
+    }
+  },
+  {
+    "key": "cold",
+    "variable": {
+      "type": "temperature",
+      "values": [
+        35.0,
+        35.5,
+        36.6
+      ],
+      "affiliationCoefficient": 0.8,
+      "comparationMark": ">",
+      "affiliationFunction": "triangle"
+    }
+  }
+]

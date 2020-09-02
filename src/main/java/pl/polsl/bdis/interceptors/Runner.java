@@ -21,14 +21,14 @@ public class Runner {
             "    \"id\": 131,\n" +
             "    \"age\": 47,\n" +
             "    \"gender\": \"female\",\n" +
-            "    \"temperature\": 35.2314\n" +
+            "    \"temperature\": 35.5314\n" +
             "  }";
     private static String body2 =
             "{\n" +
             "    \"id\": 179,\n" +
             "    \"age\": 21,\n" +
             "    \"gender\": \"male\",\n" +
-            "    \"temperature\": 35.5879\n" +
+            "    \"temperature\": 38.5879\n" +
             "  }";
 
     private static String arrayBody = "[\n" +
@@ -58,8 +58,9 @@ public class Runner {
 
         Map<String, String> settings = new HashMap<String, String>();
         settings.put("streamClass", "pl.polsl.bdis.models.Patient");
-        settings.put("query", "select * from stream where (triangle(temperature, 35.0, 35.5, 36.6) > 0.8 OR triangle(temperature, 35.0, 35.5, 36.6) < 0.8)");
-//        settings.put("query", "select * from stream where (temperature > 35.0 AND temperature < 36.0)");
+        settings.put("query", "select * from stream where (fever OR cold)");
+//        settings.put("query", "select * from stream where cold");
+//        settings.put("query", "select * from stream where triangle(temperature, 35.0, 35.5, 36.6) > 0.8");
 //        settings.put("query", "select temperature, CASE WHEN temperature > 35.5879 THEN 1 ELSE 5 AS affiliation from stream");
 //        settings.put("query", "select * from stream where (temperature >= 35.00000 AND temperature <= 36.72000)");//  AND (temperature >= 35.40000 AND temperature <= 36.72000))");
         Context context = new Context(settings);

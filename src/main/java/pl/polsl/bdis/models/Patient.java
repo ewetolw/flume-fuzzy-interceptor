@@ -1,7 +1,5 @@
 package pl.polsl.bdis.models;
 
-import com.googlecode.cqengine.attribute.SimpleAttribute;
-import com.googlecode.cqengine.query.option.QueryOptions;
 
 import java.io.Serializable;
 

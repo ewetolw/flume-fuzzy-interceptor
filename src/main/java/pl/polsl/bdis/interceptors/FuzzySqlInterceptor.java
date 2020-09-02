@@ -28,11 +28,20 @@ public class FuzzySqlInterceptor implements Interceptor {
     private final ObjectMapper mapper = new ObjectMapper();
 
     public FuzzySqlInterceptor(Class<Serializable> streamClass, String query) {
+        String parsedQuery = null;
         this.stream =  streamClass;
         System.out.println("Created stream for data structure: " + this.stream);
+        System.out.println("Set path to ling variables: " + System.getProperty("variablePath"));
 
         QueryParser preParser = new QueryParser();
-        this.query = preParser.parse(query);
+        try {
+            parsedQuery = preParser.readLinguisticVariables(query);
+            parsedQuery = preParser.parse(parsedQuery);
+        } catch (IOException e) {
+            e.printStackTrace();
+            parsedQuery = query;
+        }
+        this.query = parsedQuery;
         System.out.println("Set query: " + this.query);
 
         this.parser = SQLParser.forPojoWithAttributes(this.stream, createAttributes(this.stream));
