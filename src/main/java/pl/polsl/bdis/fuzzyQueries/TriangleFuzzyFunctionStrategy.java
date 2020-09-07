@@ -24,9 +24,6 @@ public class TriangleFuzzyFunctionStrategy implements FuzzyFunctionStrategy {
                         Double.parseDouble(affiliationCoefficient)
                 );
             }
-            else if(parameters.length == 4) {
-                // fuzzyQuery should look like this: triangle(colName, a, b, c)
-            }
 
             return translatedQuery;
 

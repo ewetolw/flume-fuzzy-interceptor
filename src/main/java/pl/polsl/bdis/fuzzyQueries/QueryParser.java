@@ -17,7 +17,7 @@ public class QueryParser {
 
     public QueryParser () {
         fuzzyFunctionByExpression.put(Pattern.compile("triangle\\(([^)]+)\\)\\s*\\W*\\d.?\\d?"), new TriangleFuzzyFunctionStrategy());
-        fuzzyFunctionByExpression.put(Pattern.compile("trapeze\\(([^)]+)\\)"), new TrapezeFuzzyFunctionStrategy());
+        fuzzyFunctionByExpression.put(Pattern.compile("trapeze\\(([^)]+)\\)\\s*\\W*\\d.?\\d?"), new TrapezeFuzzyFunctionStrategy());
         // initialize this map with all fuzzy expressions. Probably json file containing linguistic expressions should
         // be read here as well and initialized
     }

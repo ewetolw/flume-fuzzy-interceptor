@@ -58,13 +58,13 @@ public class Runner {
 
         Map<String, String> settings = new HashMap<String, String>();
         settings.put("streamClass", "pl.polsl.bdis.models.Patient");
-//        settings.put("query", "SELECT * FROM stream WHERE trapeze(temperature, 35.7, 36.6, 37.2, 38.0, 0.5)");
+        settings.put("query", "SELECT * FROM stream WHERE trapeze(temperature, 35.7, 36.6, 37.2, 38.0) < 0.5");
 //        settings.put("query", "SELECT * FROM stream WHERE triangle(temperature, 35.7, 36.6, 37.2) < 0.5");
 //        settings.put("query", "SELECT * FROM stream WHERE (triangle(temperature, 35.7, 36.6, 37.2) < 0.5 OR triangle(temperature, 35.0, 35.5, 36.6) > 0.8)");
 //        settings.put("query", "SELECT * FROM stream WHERE (triangle(temperature, 34.0, 36.6, 37.2) > 0.5 OR triangle(age, 23, 40, 60) > 0.8)");
 //        settings.put("query", "select * from stream where triangle(temperature, 35.0, 35.5, 36.6) > 0.8");
 //        settings.put("query", "select * from stream where cold");
-        settings.put("query", "select * from stream where (fever OR cold)");
+//        settings.put("query", "select * from stream where (fever OR cold)");
         Context context = new Context(settings);
         FuzzySqlInterceptor.Builder builder = new FuzzySqlInterceptor.Builder();
         builder.configure(context);
