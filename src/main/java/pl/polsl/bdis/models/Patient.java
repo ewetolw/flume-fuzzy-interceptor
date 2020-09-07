@@ -6,11 +6,11 @@ import java.io.Serializable;
 public class Patient implements Serializable {
 
     Integer id;
-    Integer age;
+    Double age;
     Double temperature;
     String gender;
 
-    public Patient(Integer id, Integer age, Double temperature, String gender) {
+    public Patient(Integer id, Double age, Double temperature, String gender) {
         this.id = id;
         this.age = age;
         this.temperature = temperature;
@@ -29,11 +29,11 @@ public class Patient implements Serializable {
         this.id = id;
     }
 
-    public Integer getAge() {
+    public Double getAge() {
         return age;
     }
 
-    public void setAge(Integer age) {
+    public void setAge(Double age) {
         this.age = age;
     }
 
